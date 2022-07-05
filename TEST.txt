@@ -1,0 +1,51 @@
+From Ibridge 360 to Everyone 03:09 PM
+Find all the student name, course name whose data of join is last year and belongs to Chennai or Bangalore city
+From Ibridge 360 to Everyone 03:14 PM
+Find the common subjects between ECE and CSE Courses
+Me to Ibridge 360 (Direct Message) 03:14 PM
+SELECT S_NAME,C_NAME FROM STUDENT INNER JOIN COURSE ON COURSE.COURSE_ID=STUDENT.COURSE_ID WHERE TO_CHAR(SYSDATE,'YYYY-1')                                       AND S_CITY='CHENNAI' OR S_CITY='BANGALORE'
+From Ibridge 360 to Everyone 03:19 PM
+Find all the courses where we have more than 2 students from Chennai
+Me to Ibridge 360 (Direct Message) 03:21 PM
+SELECT C_NAME,SUB_NAME,COMMENTS FROM COURSE INNER JOIN COURSE_SUBJECT ON COURSE.COURSE_ID = COURSE_SUBJECT.COURSE_ID INNER JOIN SUBJECT ON SUBJECT.SUB_ID=COURSE_SUBJECT.SUB_ID WHERE COURSE BETWEEN ECE AND CSE
+From Ibridge 360 to Everyone 03:24 PM
+Find all the students who paid the fee after due date for the schedule_id 25
+From Ibridge 360 to Everyone 03:30 PM
+want to display the course_name, year_wise, fees collection
+Me to Ibridge 360 (Direct Message) 03:36 PM
+SELECT S_NAME FROM STUDENT WHERE S_CITY='CHENNAI' AND  C_ID > (SELECT C_NAME,COUNT(S_ID) FROM COURSE AND STUDENT ON COURSE.COURSE_ID =STUDENT.COURSE_ID GROUP BY C_NAME HAVING S_ID>2)
+SELECT S_NAME FROM STUDENT  WHERE COURSE_ID NOT IN (SELECT COURUSE_ID FROM FEE_PAYMENT)
+From Ibridge 360 to Everyone 03:39 PM
+Find the student_name, course_name, subject_name and subject type for all the students who are taking ECE course who are from Chennai and who joined in the year of 2019
+Me to Ibridge 360 (Direct Message) 03:42 PM
+SELECT S_NAME ,PEE_PAID_DATE FROM STUDENT INNER JOIN FEE_PAYMENT ON STUDENT.COURSE_ID = COURSE.C_ID WHERE TO_CHAR(FEE_PAID_DATE,'DD/MM/YY') TO (SYSDATE,'DD/MM/YY')
+From Ibridge 360 to Everyone 03:45 PM
+Find the student who are from the same city as student RAVI
+From Ankita to Everyone 03:47 PM
+SELECT S_NAME FROM STUDENT WHERE S_CITY=(SELECT S_CITY FROM STUDENT WHERE S_NAME='RAVI')
+Me to Ibridge 360 (Direct Message) 03:48 PM
+SELECT S_NAME,C_NAME,SUB_NAME FROM COURSE INNER JOIN STUDENT ON COURSE.COURSE_ID = COURSE.COURSE_ID INNER JOIN COURSE_SUBJECT ON COURSE.COURSE_ID = COURSE_SUBJECT.COURSE_ID INNER JOIN SUBJECT ON SUBJECT.SUB_ID = COURSE_SUBJECT.SUB_ID WHERE C_NAME='ECE' AND S_CITY='CHENNAI' AND TO_CHAR(S_DOJ,'YYYY')=2019
+From Ibridge 360 to Everyone 03:48 PM
+Display the sub_name, sub_type and no of hours. Consider only the max number of hours in respective sub type
+Me to Ibridge 360 (Direct Message) 03:50 PM
+SELECT S_NAME FROM STUDENT WHERE S_CITY=(SELECT S_CITY FROM STUDENT WHERE S_NAME='RAVI')
+From Ankita to Everyone 03:55 PM
+SELECT SUB_NAME, SUB_TYPE, MAX(NO_OF_HOURS) FROM SUBJECT GROUP BY SUB_TYPE
+4.SELECT C_NAME,S_NAME,SUB_NAME FROM COURSE C INNER JOIN STUDENT S ON C.COURSE_ID = S.COURSE_ID INNER JOIN COURSE_SUBJECT CS ON C.COURSE_ID = CS.COURSE_ID INNER JOIN SUBJECT SU ON CS.SUB_ID = SU.SUB_ID WHERE CIT='CHENNAI' AND YR='2019'
+From Ibridge 360 to Everyone 03:55 PM
+Identify the table which will have the maximum of rows in this model (consider college)
+Me to Ibridge 360 (Direct Message) 03:57 PM
+SELECT SUB_NAME,SUB_TYPE FROM SUBJECT WHERE NO_OF_HOURS=(SELECT MAX(NO_OF_HOURS FROM SUBJECT)
+STUDENT TABLE
+From Ibridge 360 to Everyone 03:57 PM
+Identify the table which will have least number of records
+From Ankita to Everyone 03:57 PM
+STUDENT
+Me to Ibridge 360 (Direct Message) 03:58 PM
+FEE_SCHEDULE
+From Ibridge 360 to Everyone 04:02 PM
+Identify the dimension tables from this model
+Identify the transaction / fact table in this model
+Me to Ibridge 360 (Direct Message) 04:02 PM
+STUDENT ,FEE_SCHEDULE,FEE_PAYMENT TABLE WILL BE DIMENSION
+FEE_PAYMENT

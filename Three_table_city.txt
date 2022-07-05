@@ -1,0 +1,72 @@
+---Find the number of states in India
+SELECT COUNT(STATE_ID)
+FROM STATE_1
+WHERE COUNTRY_ID IN (SELECT COUNTRY_ID 
+                            FROM COUNTRY
+                            WHERE COUNTRY_NAME = 'INDIA')
+                            
+---How many cities we from India where we have more population than 5,00,000
+SELECT COUNT(CITY_ID)
+FROM CITY_01 INNER JOIN STATE_1
+ON CITY_01.STATE_ID = STATE_1.STATE_ID
+INNER JOIN COUNTRY
+ON COUNTRY.COUNTRY_ID = STATE_1.COUNTRY_ID
+WHERE COUNTRY_NAME = 'INDIA'
+AND CITY_POPULATION > 500000
+
+---Find the city_name which has more population than the city of Hubli
+SELECT CITY_NAME
+FROM CITY_01
+WHERE CITY_POPULATION > (SELECT CITY_POPULATION 
+                        FROM CITY_01
+                        WHERE CITY_NAME = 'HUBLI')
+                        
+---Display the country_name, state_name, city_name to all the states which are ruled by Congress political party
+SELECT COUNTRY_NAME,STATE_NAME,CITY_NAME
+FROM COUNTRY INNER JOIN STATE_1
+ON COUNTRY.COUNTRY_ID = STATE_1.COUNTRY_ID
+INNER JOIN CITY_01
+ON CITY_01.STATE_ID = STATE_1.STATE_ID
+WHERE POLITICAL_PARTY = 'CONGRESS'
+
+---Display the state, city_name, city_population (consider only highest populated city in each state)
+SELECT STATE_NAME,CITY_NAME,CITY_POPULATION
+FROM STATE_1 INNER JOIN CITY_01
+ON STATE_1.STATE_ID = CITY_01.STATE_ID
+WHERE CITY_POPULATION IN (SELECT MAX(CITY_POPULATION)
+                            FROM CITY
+                            GROUP BY STATE_ID)
+                            
+---Find out the state which has more than 3 cities
+SELECT STATE_NAME,COUNT(CITY_ID)
+FROM STATE_1 INNER JOIN CITY_01
+ON STATE_1.STATE_ID = CITY_01.STATE_ID
+GROUP BY STATE_NAME
+HAVING COUNT(CITY_ID)>3
+
+---Find all the cities which are from the state which are ruled by BJP or CPM
+SELECT CITY_NAME,STATE_NAME,POLITICAL_PARTY
+FROM CITY_01 INNER JOIN STATE_1
+ON CITY_01.STATE_ID = STATE_1.STATE_ID
+WHERE POLITICAL_PARTY ='BJP' OR POLITICAL_PARTY = 'CPM'
+
+---Display country_name, state_name. Display all the country names even there is no associated state exists.
+SELECT COUNTRY_NAME,STATE_NAME
+FROM COUNTRY LEFT JOIN STATE_1
+ON COUNTRY.COUNTRY_ID = STATE_1.COUNTRY_ID
+
+---Display city name which belongs to Karnataka and have population more than Nagpur
+SELECT CITY_NAME
+FROM CITY_01 INNER JOIN STATE_1
+ON CITY_01.STATE_ID = STATE_1.STATE_ID
+WHERE STATE_NAME = 'KARNATAKA'
+AND CITY_POPULATION > (SELECT CITY_POPULATION
+                        FROM CITY_01
+                        WHERE CITY_NAME = 'NAGPUR')
+                        
+--Display all the states which don’t have any associated cities
+SELECT STATE_NAME
+FROM STATE_1
+WHERE STATE_ID NOT IN (SELECT STATE_ID
+                        FROM CITY_01)
+

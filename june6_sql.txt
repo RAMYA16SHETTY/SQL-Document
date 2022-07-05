@@ -1,0 +1,94 @@
+create table manufacture(
+        m_code int primary key,
+        m_name varchar2(20)
+        )
+desc manufacture
+
+insert into manufacture values(101,'tata')
+insert into manufacture values(102,'bajai')
+insert into manufacture values(103,'sony')
+insert into manufacture values(104,'samsung')
+
+select * from  manufacture
+
+CREATE TABLE product1 (
+    i_id int PRIMARY KEY,
+    i_name varchar2(20),
+    i_price number(10,2),
+    m_code int, FOREIGN KEY(m_code) REFERENCES manufacture(m_code)
+);
+
+desc product1
+drop table product1
+
+
+
+insert into product1 values (1,'Nano',155000,101)
+insert into product1 values (2,'indica',750000,101)
+insert into product1 values (3,'Bajaj auto',45000,102)
+insert into product1 values (4,'Pulsar',78000,102)
+insert into product1 values (5,'T Truck',2400000,101)
+insert into product1 values (6,'E pulsar',100000,102)
+insert into product1 values (7,'sumo',1000000,101)
+insert into product1 values (8,'pulsar++',155000,102)
+
+select * 
+from product1
+
+select *
+from manufacture
+
+commit 
+
+select i_id,i_name,i_price
+from product1
+order by i_price
+
+select i_id,i_name,i_price
+from product1
+order by i_price asc
+
+
+
+---Find all the items which are manufactured by TATA and priced between 7 and 8 lakhs.
+select product1.i_name,product1.i_price
+from manufacture inner join product1
+on manufacture.m_code = product1.m_code
+where m_name = 'tata' 
+and i_price between 700000 and 800000
+
+---Display the item name,manufacture name for all items which are priced more then 700000
+select product1.i_name,manufacture.m_name
+from manufacture inner join product1
+on manufacture.m_code = product1.m_code
+where i_price > 700000
+
+---Display manufacture name does not have any item
+select m_name
+from manufacture
+where m_code not in (select m_code 
+                    from product1)
+                    
+---Display  manufacture name,item name,item price,max price
+select manufacture.m_name,product1.i_name,product1.i_price
+from manufacture inner join product1
+on manufacture.m_code = product1.m_code
+where i_price in(select max(i_price) 
+                    from product1)
+                    
+---display item name starts with E in product table
+select i_name
+from product1
+where i_name like 'E%'
+
+---dispaly item name item price is greater then 78000 where item name is sumo
+select i_name,i_price
+from product1
+where i_price > 78000
+and i_name =(select i_name
+                from product1
+                where i_name = 'sumo')
+
+
+
+                    

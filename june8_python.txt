@@ -1,0 +1,59 @@
+#find the vowel in srting and count of string
+lst=[]
+sentance=input("enter the string :")
+for i in sentance:
+    if(i=='a' or i=='e' or i=='i' or i=='o' or i=='u' ):
+     lst.append(i)
+print("This are vowel in string :",lst)
+print("The count of vowel in string :",len(lst))
+
+output:
+enter the string : python programming
+This are vowel in string : ['o', 'o', 'a', 'i']
+The count of vowel in string : 4
+
+-------------------------------
+#2)palindrome program
+sentance = input("Enter the string :")
+if sentance==sentance[::-1]:
+    print("Entered string is palindrome")
+else:
+    print("Entered string is not palindrome")
+
+output:
+Enter the string :ailia
+Entered string is palindrome
+----------------------------------
+#3)using substring
+sentance = input("Enter the string")
+print(sentance[2:-6])
+
+output:
+Enter the string hello world welcome to program
+ello world welcome to p
+-----------------------------
+#4)swap two numbers
+valueA=int(input("enter the number:"))
+valueB=int(input("enter the number:"))
+temp=valueA
+valueA=valueB
+valueB=temp
+print("valueA",valueA)
+print("valueB ",valueB)
+
+output:
+enter the number:10
+enter the number:20
+valueA 20
+valueB  10
+-------------------------------
+#5)check odd number or even number
+value = int(input("Enter thr value :"))
+if (value % 2==0):
+    print("entered number is even number")
+else:
+    print("entered number is odd number")
+
+output:
+Enter thr value :5
+entered number is odd number

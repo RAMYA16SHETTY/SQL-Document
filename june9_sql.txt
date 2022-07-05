@@ -1,0 +1,72 @@
+SELECT * FROM STADIUM1
+SELECT * FROM  MATCH1
+
+---If I do an inner join between stadium and matches how many records we get?
+SELECT *
+FROM STADIUM1 INNER JOIN MATCH1
+ON STADIUM1.STA_ID = MATCH1.STA_ID
+
+---If we do an left join between stadium and matches (left table is stadium), how many records we get
+SELECT *
+FROM STADIUM1
+LEFT JOIN MATCH1 ON STADIUM1.STA_ID = MATCH1.STA_ID
+
+---If we do a righ join between stadium and matches (righ table is stadium), how many records we get
+SELECT *
+FROM STADIUM1
+RIGHT JOIN MATCH1 ON STADIUM1.STA_ID=MATCH1.STA_ID
+
+---If we do a full outer join between stadium and matches, how many records we get.
+SELECT *
+FROM STADIUM1
+FULL OUTER JOIN MATCH1 ON STADIUM1.STA_ID=MATCH1.STA_ID
+
+---Write a query to give the match_date, game, public_Tickets count for all the matches happen this month
+SELECT MAT_DATE,GAME,PUBLIC_TICKETS
+FROM MATCH1 
+WHERE TO_CHAR(MAT_DATE, 'MM-YY')= TO_CHAR(SYSDATE,'MM-YY')
+
+---Write a query to give the stadium which has the maximum seating capacity in Bangalore
+SELECT STA_NAME
+FROM STADIUM1
+WHERE STA_CAPACITY=(SELECT MAX(STA_CAPACITY)
+              FROM STADIUM1
+              WHERE STA_CITY ='BANGALORE')
+              
+---Write a query to display the number of matches happen in different types of games
+SELECT GAME,COUNT(MAT_ID) AS NUMBER_MATCHES
+FROM MATCH1
+GROUP BY GAME
+
+---Display Stadium Name and number of matches happen in each stadium
+SELECT STA_NAME,COUNT(MAT_ID)
+FROM STADIUM1 INNER JOIN MATCH1
+ON STADIUM1.STA_ID = MATCH1.STA_ID
+GROUP BY STA_NAME
+
+---Find the city where we have more than one stadium
+SELECT STA_CITY,COUNT(STA_ID)
+FROM STADIUM1
+GROUP BY STA_CITY
+HAVING COUNT(STA_ID) >1
+
+---Display Game, Match_date, Match_venue, capacity_of_stadium, general_public_ticket_count, sponsor_ticket_count for all the matches
+SELECT GAME,MAT_DATE,STA_NAME||' '||STA_CITY AS MATCH_VENUE,STA_CAPACITY,PUBLIC_TICKETS,SPONSOR_TICKETS
+FROM STADIUM1 INNER JOIN MATCH1
+ON STADIUM1.STA_ID = MATCH1.STA_ID
+
+(OR)
+
+SELECT GAME,MAT_DATE,CONCAT(STA_NAME,STA_CITY)AS MATCH_VENUE,STA_CAPACITY,PUBLIC_TICKETS,SPONSOR_TICKETS
+FROM STADIUM1 INNER JOIN MATCH1
+ON STADIUM1.STA_ID = MATCH1.STA_ID
+
+----DISPLAY STADIUM NAME,GAME, AND MAX OF PUBLIC_TICKETS
+SELECT STA_NAME,GAME
+FROM STADIUM1 INNER JOIN MATCH1
+ON STADIUM1.STA_ID = MATCH1.STA_ID
+WHERE PUBLIC_TICKETS = (SELECT MAX(PUBLIC_TICKETS)
+                        FROM MATCH1)
+                        
+                        
+

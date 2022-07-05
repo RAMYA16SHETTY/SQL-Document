@@ -1,0 +1,66 @@
+---DISPLAY CountryName	Number of Resorts
+SELECT COUNTRY_NAME, COUNT(RES_ID)AS NUMBER_OF_RESORT
+FROM COUNTRY_1 c INNER JOIN RESORT r
+ON c.COUNTRY_ID = r.COUNTRY_ID
+GROUP BY COUNTRY_NAME
+
+---DISPLAY CountryName	Number of Customers
+SELECT COUNTRY_NAME,COUNT(CUST_NAME)
+FROM COUNTRY_1 INNER JOIN CUSTOMER_1
+ON COUNTRY_1.COUNTRY_ID = CUSTOMER_1.COUNTRY_ID
+GROUP BY COUNTRY_NAME
+
+---Display the customers who don’t have dob mentioned in the database						
+SELECT CUST_NAME 
+FROM CUSTOMER_1
+WHERE CUST_DOB IS NULL
+
+---display the customers name, age, phone, city for the customers who are from USA or CANANDA.
+SELECT CUST_NAME,ROUND(MONTHS_BETWEEN(SYSDATE,CUST_DOB)/12) AS AGE,CUST_PHONE,CUST_CITY
+FROM CUSTOMER_1 INNER JOIN COUNTRY_1
+ON CUSTOMER_1.COUNTRY_ID = COUNTRY_1.COUNTRY_ID
+WHERE COUNTRY_NAME IN ('USA','CANADA')
+
+---Display the countries where we don’t have any resorts.
+SELECT COUNTRY_NAME 
+FROM COUNTRY_1
+WHERE COUNTRY_ID NOT IN (SELECT COUNTRY_ID 
+                        FROM RESORT)
+
+---Find the countries where we have both customers and resorts
+SELECT COUNTRY_NAME 
+FROM COUNTRY_1
+WHERE COUNTRY_ID IN (SELECT COUNTRY_ID 
+                        FROM RESORT)
+INTERSECT
+SELECT COUNTRY_NAME
+FROM COUNTRY_1
+WHERE COUNTRY_ID IN (SELECT COUNTRY_ID
+                    FROM CUSTOMER_1)
+                    
+---Find the countries where we customers but not resorts
+SELECT COUNTRY_NAME 
+FROM COUNTRY_1
+WHERE COUNTRY_ID IN (SELECT COUNTRY_ID 
+                        FROM RESORT)
+MINUS
+SELECT COUNTRY_NAME
+FROM COUNTRY_1
+WHERE COUNTRY_ID IN (SELECT COUNTRY_ID
+                    FROM CUSTOMER_1)
+                    
+---Find the country in which we have Lemon Tree resort
+SELECT COUNTRY_NAME 
+FROM COUNTRY_1
+WHERE COUNTRY_ID IN (SELECT COUNTRY_ID
+                        FROM RESORT
+                        WHERE RES_NAME ='LEMON TREE')
+
+---Find the resort wise number of resorts we have.
+SELECT RES_TYPE,RES_NAME,COUNT(RES_ID)
+FROM RESORT
+GROUP BY RES_TYPE,RES_NAME
+
+SELECT RES_TYPE,COUNT(RES_ID)
+FROM RESORT
+GROUP BY RES_TYPE

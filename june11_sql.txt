@@ -1,0 +1,85 @@
+---Find the team names to which player Kohli played.
+SELECT TM_NAME,TM_ID
+FROM TEAM1
+WHERE TM_ID IN (SELECT TM_ID
+                FROM PLAYER INNER JOIN TEAM_PLAYER
+                ON PLAYER.PLAYER_ID = TEAM_PLAYER.PLAYER_ID
+                WHERE PLAYER_NAME = 'KOHLI')
+
+---Display the current team to which Marian is playing for.
+SELECT TM_NAME
+FROM TEAM1
+WHERE TM_ID IN (SELECT TM_ID
+                    FROM PLAYER INNER JOIN TEAM_PLAYER
+                    ON PLAYER.PLAYER_ID = TEAM_PLAYER.PLAYER_ID
+                    WHERE PLAYER_NAME = 'MARIAN')
+                    
+---Find the number of players we have who is older than player Surendra
+SELECT PLAYER_NAME,PLAYER_DOB
+FROM PLAYER
+WHERE PLAYER_DOB < (SELECT PLAYER_DOB
+                    FROM PLAYER
+                    WHERE PLAYER_NAME = 'SURENDRA')
+
+
+SELECT PLAYER_DOB,COUNT(PLAYER_NAME)
+FROM PLAYER
+GROUP BY PLAYER_DOB
+HAVING PLAYER_NAME ='SURENDRA'
+
+---Display team name and total contract value of players for that team.
+SELECT TM_NAME,SUM(CONTRACT_VALUE)
+FROM TEAM1 INNER JOIN TEAM_PLAYER
+ON TEAM1.TM_ID = TEAM_PLAYER.TM_ID
+GROUP BY TM_NAME
+
+---Display the team_name, player_name, start_date, end_date and the contract value
+SELECT TM_NAME,PLAYER_NAME,START_DATE,END_DATE,CONTRACT_VALUE
+FROM TEAM1 INNER JOIN  TEAM_PLAYER 
+ON TEAM1.TM_ID = TEAM_PLAYER.TM_ID
+INNER JOIN PLAYER
+ON PLAYER.PLAYER_ID = TEAM_PLAYER.PLAYER_ID
+
+---Display all the players who were born in the month of April
+SELECT PLAYER_NAME
+FROM PLAYER
+WHERE TO_CHAR(PLAYER_DOB,'MON')='APR'
+
+---Display all the players whose age is greater than 25 and who are either Grade B or Grade C Players
+-----CALCULATE PLAYERS AGE
+SELECT ROUND(MONTHS_BETWEEN(SYSDATE,PLAYER_DOB)/12) AGE FROM PLAYER
+
+SELECT PLAYER_NAME
+FROM PLAYER INNER JOIN TEAM_PLAYER
+ON PLAYER.PLAYER_ID = TEAM_PLAYER.PLAYER_ID
+WHERE ROUND(MONTHS_BETWEEN(SYSDATE,PLAYER_DOB)/12)>25
+AND GRADE IN ('B','C')
+
+---Display the player_name, team_name and team's manager name for all the cricket players
+SELECT PLAYER_NAME,TM_NAME,MANGAR_NAME
+FROM PLAYER INNER JOIN TEAM_PLAYER
+ON PLAYER.PLAYER_ID = TEAM_PLAYER.PLAYER_ID
+INNER JOIN TEAM1
+ON TEAM1.TM_ID = TEAM_PLAYER.TM_ID
+WHERE GAME='CRICKET'
+
+---Display the stadium_name, match_date, home_team_name, player_name (consider only home team players)
+SELECT STA_NAME,MATCH_DATE,TM_NAME,PLAYER_NAME
+FROM STADIUM1 INNER JOIN MATCHS_1
+ON STADIUM1.STA_ID = MATCHS_1.STA_ID
+INNER JOIN TEAM1
+ON TEAM1.TM_ID = MATCHS_1.HOME_TEAM_ID
+INNER JOIN TEAM_PLAYER
+ON TEAM1.TM_ID = TEAM_PLAYER.TM_ID
+INNER JOIN PLAYER
+ON PLAYER.PLAYER_ID = TEAM_PLAYER.PLAYER_ID
+
+---Create view which gives the players and their current association team. If the sysdate is between the start_Date and end_date that means they are working for that team.
+
+CREATE VIEW CURRENT_ASSOCIATION_TEAM AS
+SELECT PLAYER_NAME,TM_NAME
+FROM PLAYER INNER JOIN TEAM_PLAYER
+ON PLAYER.PLAYER_ID = TEAM_PLAYER.PLAYER_ID
+INNER JOIN TEAM1
+ON TEAM1.TM_ID = TEAM_PLAYER.TM_ID
+WHERE SYSDATE BETWEEN START_DATE AND END_DATE;
